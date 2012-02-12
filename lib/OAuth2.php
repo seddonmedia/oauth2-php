@@ -227,6 +227,7 @@ class OAuth2 {
 	const HTTP_BAD_REQUEST = '400 Bad Request';
 	const HTTP_UNAUTHORIZED = '401 Unauthorized';
 	const HTTP_FORBIDDEN = '403 Forbidden';
+	const HTTP_ERROR = '500 Internal Server Error';
 	const HTTP_UNAVAILABLE = '503 Service Unavailable';
 	
 	/**
@@ -327,6 +328,15 @@ class OAuth2 {
 	 * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-5.2
 	 */
 	const ERROR_INSUFFICIENT_SCOPE = 'invalid_scope';
+
+	/**
+	 * The authorization server encountered an unexpected
+	 * condition which prevented it from fulfilling the request.
+	 *
+	 * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.1.2.1
+	 * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2.2.1
+	 */
+	const ERROR_SERVER_ERROR = 'server_error';
 
 	/**
 	 * @}
@@ -1004,12 +1014,17 @@ class OAuth2 {
 			"scope" => $scope
 		);
 		
-		$this->storage->setAccessToken($token["access_token"], $client_id, $user_id, time() + $this->getVariable(self::CONFIG_ACCESS_LIFETIME), $scope);
+		if (!$this->storage->setAccessToken($token["access_token"], $client_id, $user_id, time() + $this->getVariable(self::CONFIG_ACCESS_LIFETIME), $scope)) {
+			throw new OAuth2ServerException(self::HTTP_ERROR, self::HTTP_ERROR, 'Internal server error');
+		}
+		
 		
 		// Issue a refresh token also, if we support them
 		if ($this->storage instanceof IOAuth2RefreshTokens) {
 			$token["refresh_token"] = $this->genAccessToken();
-			$this->storage->setRefreshToken($token["refresh_token"], $client_id, $user_id, time() + $this->getVariable(self::CONFIG_REFRESH_LIFETIME), $scope);
+			if (!$this->storage->setRefreshToken($token["refresh_token"], $client_id, $user_id, time() + $this->getVariable(self::CONFIG_REFRESH_LIFETIME), $scope)) {
+				throw new OAuth2ServerException(self::HTTP_ERROR, self::HTTP_ERROR, 'Internal server error');
+			}
 			
 			// If we've granted a new refresh token, expire the old one
 			if ($this->oldRefreshToken) {
@@ -1039,7 +1054,9 @@ class OAuth2 {
 	 */
 	private function createAuthCode($client_id, $user_id, $redirect_uri, $scope = NULL) {
 		$code = $this->genAuthCode();
-		$this->storage->setAuthCode($code, $client_id, $user_id, $redirect_uri, time() + $this->getVariable(self::CONFIG_AUTH_LIFETIME), $scope);
+		if (!$this->storage->setAuthCode($code, $client_id, $user_id, $redirect_uri, time() + $this->getVariable(self::CONFIG_AUTH_LIFETIME), $scope)) {
+			throw new OAuth2ServerException(self::HTTP_ERROR, self::HTTP_ERROR, 'Internal server error');
+		}
 		return $code;
 	}
 

@@ -46,10 +46,6 @@ interface IOAuth2GrantCode extends IOAuth2Storage {
 	 *
 	 * This function should be the storage counterpart to getAuthCode().
 	 *
-	 * If storage fails for some reason, we're not currently checking for
-	 * any sort of success/failure, so you should bail out of the script
-	 * and provide a descriptive fail message.
-	 *
 	 * Required for OAuth2::GRANT_TYPE_AUTH_CODE.
 	 *
 	 * @param $code
@@ -64,6 +60,9 @@ interface IOAuth2GrantCode extends IOAuth2Storage {
 	 * Expiration to be stored.
 	 * @param $scope
 	 * (optional) Scopes to be stored in space-separated string.
+	 * 
+	 * @return
+	 * TRUE if successfully saved, FALSE if failed.
 	 *
 	 * @ingroup oauth2_section_4
 	 */

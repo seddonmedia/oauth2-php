@@ -156,7 +156,7 @@ class OAuth2StoragePDO implements IOAuth2GrantCode, IOAuth2RefreshTokens {
 	 * Implements IOAuth2Storage::setAccessToken().
 	 */
 	public function setAccessToken($oauth_token, $client_id, $user_id, $expires, $scope = NULL) {
-		$this->setToken($oauth_token, $client_id, $user_id, $expires, $scope, FALSE);
+		return $this->setToken($oauth_token, $client_id, $user_id, $expires, $scope, FALSE);
 	}
 
 	/**
@@ -219,7 +219,7 @@ class OAuth2StoragePDO implements IOAuth2GrantCode, IOAuth2RefreshTokens {
 			$stmt->bindParam(':expires', $expires, PDO::PARAM_INT);
 			$stmt->bindParam(':scope', $scope, PDO::PARAM_STR);
 			
-			$stmt->execute();
+			return $stmt->execute();
 		} catch (PDOException $e) {
 			$this->handleException($e);
 		}
@@ -254,7 +254,7 @@ class OAuth2StoragePDO implements IOAuth2GrantCode, IOAuth2RefreshTokens {
 			$stmt->bindParam(':expires', $expires, PDO::PARAM_INT);
 			$stmt->bindParam(':scope', $scope, PDO::PARAM_STR);
 			
-			$stmt->execute();
+			return $stmt->execute();
 		} catch (PDOException $e) {
 			$this->handleException($e);
 		}

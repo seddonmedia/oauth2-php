@@ -77,6 +77,9 @@ interface IOAuth2Storage {
 	 * @param $scope
 	 * (optional) Scopes to be stored in space-separated string.
 	 *
+	 * @return
+	 * TRUE if successfully saved, FALSE if failed.
+	 *
 	 * @ingroup oauth2_section_4
 	 */
 	public function setAccessToken($oauth_token, $client_id, $user_id, $expires, $scope = NULL);

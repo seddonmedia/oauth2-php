@@ -38,10 +38,6 @@ interface IOAuth2RefreshTokens extends IOAuth2Storage {
 	 *
 	 * This function should be the storage counterpart to getRefreshToken().
 	 *
-	 * If storage fails for some reason, we're not currently checking for
-	 * any sort of success/failure, so you should bail out of the script
-	 * and provide a descriptive fail message.
-	 *
 	 * Required for OAuth2::GRANT_TYPE_REFRESH_TOKEN.
 	 *
 	 * @param $refresh_token
@@ -52,6 +48,9 @@ interface IOAuth2RefreshTokens extends IOAuth2Storage {
 	 * expires to be stored.
 	 * @param $scope
 	 * (optional) Scopes to be stored in space-separated string.
+	 * 
+	 * @return
+	 * TRUE if successfully saved, FALSE if failed.
 	 *
 	 * @ingroup oauth2_section_6
 	 */
