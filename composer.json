@@ -1,5 +1,5 @@
 {
-  "name" : "thomseddon/oauth2-php",
+  "name" : "oauth2-php",
   "description" : "CakePHP OAuth2 Server Plugin",
   "authors" : [{
       "name" : "Quizlet",
@@ -26,13 +26,13 @@
     "composer/installers" : "*",
     "php" : ">=5.3.0"
   },
+  "config": {
+		"vendor-dir": "Vendor"
+	},
   "support" : {
     "forum" : "http://stackoverflow.com/tags/cakephp",
     "source" : "https://github.com/thomseddon/oauth2-php",
     "issues" : "https://github.com/thomseddon/oauth2-php/issues",
     "irc" : "irc://irc.freenode.org/cakephp"
-  },
-  "extra" : {
-    "installer-name" : "OAuth"
   }
 }
